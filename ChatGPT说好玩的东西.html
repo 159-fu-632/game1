@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>抓住我呀 😏</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: #111;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+
+    #btn {
+        position: absolute;
+        padding: 15px 30px;
+        font-size: 18px;
+        background: #ff4d4d;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.1s;
+    }
+
+    #score {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        font-size: 20px;
+    }
+</style>
+</head>
+<body>
+
+<div id="score">分数: 0</div>
+<button id="btn">点我试试</button>
+
+<script>
+let btn = document.getElementById("btn");
+let scoreText = document.getElementById("score");
+let score = 0;
+let gameMode = false;
+
+// 初始位置
+moveButton();
+
+// 按钮躲避鼠标
+document.addEventListener("mousemove", (e) => {
+    let rect = btn.getBoundingClientRect();
+    let dist = Math.hypot(e.clientX - rect.left, e.clientY - rect.top);
+
+    if (dist < 120 && !gameMode) {
+        moveButton();
+    }
+});
+
+// 点击按钮
+btn.addEventListener("click", () => {
+    score++;
+    scoreText.innerText = "分数: " + score;
+
+    // 进入疯狂模式
+    if (score === 5) {
+        gameMode = true;
+        btn.innerText = "😈 抓得到吗";
+        crazyMode();
+    } else {
+        moveButton();
+    }
+});
+
+// 随机移动
+function moveButton() {
+    let x = Math.random() * (window.innerWidth - 120);
+    let y = Math.random() * (window.innerHeight - 60);
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
+}
+
+// 疯狂模式（按钮乱飞）
+function crazyMode() {
+    setInterval(() => {
+        moveButton();
+    }, 200);
+}
+
+// 防止窗口缩放问题
+window.onresize = moveButton;
+</script>
+
+</body>
+</html>
